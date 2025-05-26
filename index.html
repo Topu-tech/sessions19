@@ -1,93 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>𝐀𝐋𝐎𝐍𝐄 𝐌𝐃 𝐒𝐄𝐒𝐒𝐈𝐎𝐍 𝐒𝐂𝐀𝐍𝐍𝐄𝐑 </title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>𝐀𝐋𝐎𝐍𝐄 𝐌𝐃 𝐒𝐄𝐒𝐒𝐈𝐎𝐍 𝐒𝐂𝐀𝐍𝐍𝐄𝐑</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
-      display: flex; 
+      margin: 0;
+      height: 100vh;
+      background: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      flex-direction: column;
+    }
+
+    video.bg-video {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      min-width: 100%;
+      min-height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    #button-container {
+      display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-      background-image:  url("https://files.catbox.moe/kxfnln.mp4"); /* set the background image */
+      z-index: 2;
     }
 
-    .btn {
-      --color: #e5f5f1;
-      --color2: rgb(0, 0, 0);
-      width: 200px;
-      padding: 0.8em 1.75em;
-      background-color: Green;
-      border-radius: 6px;
-      border: .3px solid var(--color);
-      transition: .5s;
-      position: relative;
-      overflow: hidden;
+    .bubble-btn {
+      background: linear-gradient(145deg, #00ffaa, #006666);
+      color: white;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 50px;
+      box-shadow: 0 8px 15px rgba(0, 255, 170, 0.2);
+      font-size: 16px;
+      font-weight: bold;
+      margin: 10px;
       cursor: pointer;
+      transition: all 0.3s ease-in-out;
+      font-family: 'Segoe UI', sans-serif;
+      position: relative;
       z-index: 1;
-      font-weight: 300;
-      font-size: 17px;
-      font-family: 'Roboto', 'Segoe UI', sans-serif;
-      text-transform: uppercase;
-      color: var(--color);
-      margin-bottom: 24px;
+      animation: float 3s ease-in-out infinite;
     }
 
-    .btn::after, .btn::before {
-      content: '';
-      display: block;
-      height: 100%;
-      width: 100%;
-      transform: skew(90deg) translate(-50%, -50%);
-      position: absolute;
-      inset: 50%;
-      left: 25%;
-      z-index: -1;
-      transition: .5s ease-out;
-      background-color: var(--color);
+    .bubble-btn:hover {
+      background: linear-gradient(145deg, #00dd99, #004444);
+      box-shadow: 0 12px 24px rgba(0, 255, 170, 0.4);
+      transform: scale(1.05);
     }
 
-    .btn::before {
-      top: -50%;
-      left: -25%;
-      transform: skew(90deg) rotate(180deg) translate(-50%, -50%);
+    .bubble-btn:active {
+      transform: scale(0.98);
+      box-shadow: 0 4px 12px rgba(0, 255, 170, 0.3);
     }
 
-    .btn:hover::before {
-      transform: skew(45deg) rotate(180deg) translate(-50%, -50%);
-    }
-
-    .btn:hover::after {
-      transform: skew(45deg) translate(-50%, -50%);
-    }
-
-    .btn:hover {
-      color: var(--color2);
-    }
-
-    .btn:active {
-      filter: brightness(.7);
-      transform: scale(.98);
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
     }
   </style>
 </head>
 <body>
 
-  <button onclick="window.open(`https://topu-scanner.onrender.com/qr`)" class="btn">qr code</button>
-  <button onclick="window.open(`/pair`)" class="btn">pair code</button>
-  <button onclick="window.open(`https://github.com/Toputech/ALONE-MD-V1`)" class="btn">github</button>
-  <button onclick="window.open(`https://wa.me/message/6ST5TFZLH6BGF1`)" class="btn">Contact Me</button>
-  <button onclick="window.open(`https://dashboard.heroku.com/new?template=https://github.com/Toputech/Alone`)" class="btn">Deploy TOPU MD</button>
-  <button onclick="window.open(`https://chat.whatsapp.com/BxelCdrHnDYBNfMy2jafgI`)" class="btn">Wa Group</button>
-  <button onclick="window.open(`https://whatsapp.com/channel/0029VaeRrcnADTOKzivM0S1r`)" class="btn">Wa Channel</button>
+  <video autoplay muted loop class="bg-video">
+    <source src="https://files.catbox.moe/kxfnln.mp4" type="video/mp4" />
+  </video>
 
+  <div id="button-container"></div>
 
-  
-  
-  
+  <script>
+    const buttons = [
+      { label: "QR Code", url: "https://topu-scanner.onrender.com/qr" },
+      { label: "Pair Code", url: "/pair" },
+      { label: "GitHub", url: "https://github.com/Toputech/ALONE-MD-V1" },
+      { label: "Contact Me", url: "https://wa.me/message/6ST5TFZLH6BGF1" },
+      { label: "Deploy TOPU MD", url: "https://dashboard.heroku.com/new?template=https://github.com/Toputech/Alone" },
+      { label: "WA Group", url: "https://chat.whatsapp.com/BxelCdrHnDYBNfMy2jafgI" },
+      { label: "WA Channel", url: "https://whatsapp.com/channel/0029VaeRrcnADTOKzivM0S1r" }
+    ];
 
+    const container = document.getElementById('button-container');
+
+    buttons.forEach(btn => {
+      const button = document.createElement('button');
+      button.textContent = btn.label;
+      button.className = 'bubble-btn';
+      button.onclick = () => window.open(btn.url, '_blank');
+      container.appendChild(button);
+    });
+  </script>
 </body>
 </html>
