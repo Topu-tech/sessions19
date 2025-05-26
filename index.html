@@ -2,70 +2,93 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>𝐀𝐋𝐎𝐍𝐄 𝐌𝐃 𝐒𝐄𝐒𝐒𝐈𝐎𝐍 𝐒𝐂𝐀𝐍𝐍𝐄𝐑</title>
+  <title>ALONE MD SESSION SCANNER</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
       margin: 0;
+      padding: 0;
       height: 100vh;
+      font-family: 'Segoe UI', sans-serif;
       background: black;
+      overflow: hidden;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      overflow: hidden;
-      flex-direction: column;
     }
 
     video.bg-video {
       position: fixed;
-      right: 0;
-      bottom: 0;
+      top: 0;
+      left: 0;
       min-width: 100%;
       min-height: 100%;
       object-fit: cover;
+      z-index: -2;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
       z-index: -1;
+    }
+
+    h1 {
+      color: #00ffe7;
+      text-shadow: 0 0 10px #00ffe7, 0 0 20px #00ffe7;
+      margin-bottom: 40px;
+      font-size: 28px;
+      text-align: center;
+      letter-spacing: 1px;
     }
 
     #button-container {
       display: flex;
       flex-direction: column;
       align-items: center;
-      z-index: 2;
     }
 
     .bubble-btn {
-      background: linear-gradient(145deg, #00ffaa, #006666);
+      background: linear-gradient(145deg, #00ffcc, #003344);
       color: white;
-      padding: 15px 30px;
+      padding: 14px 28px;
       border: none;
-      border-radius: 50px;
-      box-shadow: 0 8px 15px rgba(0, 255, 170, 0.2);
-      font-size: 16px;
-      font-weight: bold;
-      margin: 10px;
+      border-radius: 40px;
+      box-shadow: 0 0 15px #00ffcc;
+      font-size: 15px;
+      font-weight: 600;
+      margin: 12px;
       cursor: pointer;
-      transition: all 0.3s ease-in-out;
-      font-family: 'Segoe UI', sans-serif;
-      position: relative;
-      z-index: 1;
+      transition: 0.3s ease-in-out;
       animation: float 3s ease-in-out infinite;
     }
 
     .bubble-btn:hover {
-      background: linear-gradient(145deg, #00dd99, #004444);
-      box-shadow: 0 12px 24px rgba(0, 255, 170, 0.4);
-      transform: scale(1.05);
+      transform: scale(1.08);
+      box-shadow: 0 0 25px #00ffe7;
+      background: linear-gradient(145deg, #00ffcc, #005555);
     }
 
     .bubble-btn:active {
-      transform: scale(0.98);
-      box-shadow: 0 4px 12px rgba(0, 255, 170, 0.3);
+      transform: scale(0.96);
     }
 
     @keyframes float {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
-      100% { transform: translateY(0px); }
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+      100% { transform: translateY(0); }
+    }
+
+    @media screen and (max-width: 600px) {
+      .bubble-btn {
+        width: 80%;
+        font-size: 14px;
+      }
     }
   </style>
 </head>
@@ -74,6 +97,9 @@
   <video autoplay muted loop class="bg-video">
     <source src="https://files.catbox.moe/kxfnln.mp4" type="video/mp4" />
   </video>
+  <div class="overlay"></div>
+
+  <h1>ALONE MD SESSION SCANNER</h1>
 
   <div id="button-container"></div>
 
