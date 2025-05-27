@@ -19,7 +19,7 @@ function removeFile(FilePath) {
 }
 
 const cooldowns = {};
-const COOLDOWN_TIME = 5 * 60 * 1000; // 5 minutes
+const COOLDOWN_TIME = 29 * 1000; // 5 minutes
 
 router.get('/', async (req, res) => {
   try {
