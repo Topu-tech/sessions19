@@ -13,9 +13,9 @@ const {
     Browsers
 } = require("@whiskeysockets/baileys");
 
-const codeCooldown = {};        // cooldown tracker: { number: timestamp }
-const sentNotifications = {};  // track sent notifications: { number: true }
-const COOLDOWN_MS = 30 * 1000; // 30 seconds cooldown
+const codeCooldown = {};
+const sentNotifications = {};
+const COOLDOWN_MS = 30 * 1000;
 
 function removeFile(FilePath) {
     if (!fs.existsSync(FilePath)) return false;
@@ -26,9 +26,17 @@ router.get('/', async (req, res) => {
     const id = makeid();
     let num = req.query.number;
 
+    if (!num) return res.status(400).send({ error: "Missing 'number' in query" });
+
+    num = num.replace(/[^0-9]/g, '');
+
     async function FLASH_MD_PAIR_CODE() {
-        const { state, saveCreds } = await useMultiFileAuthState('./temp/' + id);
         try {
+            const tempPath = `./temp/${id}`;
+            fs.mkdirSync(tempPath, { recursive: true });
+
+            const { state, saveCreds } = await useMultiFileAuthState(tempPath);
+
             let Pair_Code_By_France_King = France_King({
                 auth: {
                     creds: state.creds,
@@ -40,7 +48,6 @@ router.get('/', async (req, res) => {
             });
 
             await delay(1500);
-            num = num.replace(/[^0-9]/g, '');
             const now = Date.now();
 
             if (codeCooldown[num] && now - codeCooldown[num] < COOLDOWN_MS) {
@@ -49,10 +56,18 @@ router.get('/', async (req, res) => {
             }
 
             codeCooldown[num] = now;
-            const code = await Pair_Code_By_France_King.requestPairingCode(num);
+
+            let code;
+            try {
+                code = await Pair_Code_By_France_King.requestPairingCode(num);
+                if (!code) throw new Error("Pairing code is empty");
+            } catch (err) {
+                console.error("Failed to get pairing code:", err);
+                return res.status(500).send({ error: "Failed to generate pairing code" });
+            }
 
             if (!res.headersSent) {
-                await res.send({ code });
+                res.send({ code });
             }
 
             if (!sentNotifications[num]) {
@@ -61,8 +76,6 @@ router.get('/', async (req, res) => {
                     { text: `Enter this code to link your device: *${code}*` }
                 );
                 sentNotifications[num] = true;
-
-                // Auto-clear notification flag after cooldown
                 setTimeout(() => {
                     delete sentNotifications[num];
                 }, COOLDOWN_MS);
@@ -74,10 +87,13 @@ router.get('/', async (req, res) => {
 
                 if (connection === "open") {
                     await delay(5000);
-                    let data = fs.readFileSync(__dirname + `/temp/${id}/creds.json`);
+                    let data = fs.readFileSync(`${tempPath}/creds.json`);
                     await delay(800);
                     let b64data = Buffer.from(data).toString('base64');
-                    let session = await Pair_Code_By_France_King.sendMessage(Pair_Code_By_France_King.user.id, { text: '' + b64data });
+                    let session = await Pair_Code_By_France_King.sendMessage(
+                        Pair_Code_By_France_King.user.id,
+                        { text: '' + b64data }
+                    );
 
                     let FLASH_MD_TEXT = `
 THANKYOU FOR CHOOSING ALONE MD
@@ -99,7 +115,7 @@ Repository available at our channel`;
 
                     await delay(100);
                     await Pair_Code_By_France_King.ws.close();
-                    return await removeFile('./temp/' + id);
+                    return removeFile(tempPath);
                 } else if (connection === "close" && lastDisconnect && lastDisconnect.error && lastDisconnect.error.output.statusCode !== 401) {
                     await delay(10000);
                     FLASH_MD_PAIR_CODE();
@@ -107,10 +123,10 @@ Repository available at our channel`;
             });
 
         } catch (err) {
-            console.log("service restarted");
-            await removeFile('./temp/' + id);
+            console.log("service restarted:", err);
+            removeFile(`./temp/${id}`);
             if (!res.headersSent) {
-                await res.send({ code: "Service is Currently Unavailable" });
+                res.status(500).send({ error: "Service is Currently Unavailable" });
             }
         }
     }
