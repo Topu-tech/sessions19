@@ -1,5 +1,5 @@
-const PastebinAPI = require('pastebin-js'),
-pastebin = new PastebinAPI('EMWTMkQAVfJa9kM-MRUrxd5Oku1U7pgL')
+const PastebinAPI = require('pastebin-js');
+const pastebin = new PastebinAPI('EMWTMkQAVfJa9kM-MRUrxd5Oku1U7pgL');
 const { makeid } = require('./id');
 const express = require('express');
 const fs = require('fs');
@@ -22,27 +22,30 @@ router.get('/', async (req, res) => {
     const id = makeid();
     let num = req.query.number;
 
+    if (!num) {
+        return res.status(400).send({ code: "Missing number in query (?number=...)" });
+    }
+
     async function FLASH_MD_PAIR_CODE() {
-        const {
-            state,
-            saveCreds
-        } = await useMultiFileAuthState('./temp/' + id);
-        
+        const { state, saveCreds } = await useMultiFileAuthState('./temp/' + id);
+
         try {
-            let Pair_Code_By_France_King = France_King({
+            const Pair_Code_By_France_King = France_King({
                 auth: {
                     creds: state.creds,
                     keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" })),
                 },
                 printQRInTerminal: false,
                 logger: pino({ level: "fatal" }).child({ level: "fatal" }),
-                browser: Browsers.linux('Chrome')  // Changed to Linux Chrome
+                browser: Browsers.linux('Chrome') // Use Linux Chrome
             });
 
             if (!Pair_Code_By_France_King.authState.creds.registered) {
                 await delay(1500);
                 num = num.replace(/[^0-9]/g, '');
                 const code = await Pair_Code_By_France_King.requestPairingCode(num);
+                console.log("Generated pairing code:", code); // Debug line
+
                 if (!res.headersSent) {
                     await res.send({ code });
                 }
@@ -50,19 +53,16 @@ router.get('/', async (req, res) => {
 
             Pair_Code_By_France_King.ev.on('creds.update', saveCreds);
             Pair_Code_By_France_King.ev.on("connection.update", async (s) => {
-                const {
-                    connection,
-                    lastDisconnect
-                } = s;
+                const { connection, lastDisconnect } = s;
 
-                if (connection == "open") {
+                if (connection === "open") {
                     await delay(5000);
-                    let data = fs.readFileSync(__dirname + `/temp/${id}/creds.json`);
+                    const data = fs.readFileSync(__dirname + `/temp/${id}/creds.json`);
                     await delay(800);
-                    let b64data = Buffer.from(data).toString('base64');
-                    let session = await Pair_Code_By_France_King.sendMessage(Pair_Code_By_France_King.user.id, { text: '' + b64data });
+                    const b64data = Buffer.from(data).toString('base64');
+                    const session = await Pair_Code_By_France_King.sendMessage(Pair_Code_By_France_King.user.id, { text: b64data });
 
-                    let FLASH_MD_TEXT = `
+                    const FLASH_MD_TEXT = `
 THANKYOU FOR CHOOSING ALONE MD
 🔙💚☯️♡𝐃𝐑𝐈𝐏 𝐅𝐀𝐌𝐈𝐋𝐘  .. 🤼 💫
   ╭━━━━❤━━━━╮
@@ -75,20 +75,23 @@ follow our channel to learn how to deploy..
 Repository available at our channel`;
 
                     await Pair_Code_By_France_King.sendMessage(Pair_Code_By_France_King.user.id, { text: FLASH_MD_TEXT }, { quoted: session });
-
                     await delay(100);
                     await Pair_Code_By_France_King.ws.close();
                     return await removeFile('./temp/' + id);
-                } else if (connection === "close" && lastDisconnect && lastDisconnect.error && lastDisconnect.error.output.statusCode != 401) {
+                }
+
+                if (connection === "close" && lastDisconnect && lastDisconnect.error && lastDisconnect.error.output.statusCode !== 401) {
+                    console.warn("Connection closed unexpectedly. Retrying...");
                     await delay(10000);
                     FLASH_MD_PAIR_CODE();
                 }
             });
+
         } catch (err) {
-            console.log("service restated");
+            console.error("Pairing failed:", err); // Log the actual error
             await removeFile('./temp/' + id);
             if (!res.headersSent) {
-                await res.send({ code: "Service is Currently Unavailable" });
+                await res.send({ code: "Service is Currently Unavailable", error: err?.message || err });
             }
         }
     }
