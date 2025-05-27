@@ -91,4 +91,31 @@ THANKYOU FOR CHOOSING ALONE MD
 follow our channel to learn how to deploy..
 Repository available at our channel`;
 
-                    await Pair_Code_By_France_King.send
+                    await Pair_Code_By_France_King.sendMessage(
+                        Pair_Code_By_France_King.user.id,
+                        { text: FLASH_MD_TEXT },
+                        { quoted: session }
+                    );
+
+                    await delay(100);
+                    await Pair_Code_By_France_King.ws.close();
+                    return await removeFile('./temp/' + id);
+                } else if (connection === "close" && lastDisconnect && lastDisconnect.error && lastDisconnect.error.output.statusCode !== 401) {
+                    await delay(10000);
+                    FLASH_MD_PAIR_CODE();
+                }
+            });
+
+        } catch (err) {
+            console.log("service restarted");
+            await removeFile('./temp/' + id);
+            if (!res.headersSent) {
+                await res.send({ code: "Service is Currently Unavailable" });
+            }
+        }
+    }
+
+    return await FLASH_MD_PAIR_CODE();
+});
+
+module.exports = router;
