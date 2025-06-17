@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
 
   <style>
+    /* Styles are unchanged from your original */
     * {margin: 0; padding: 0; box-sizing: border-box;}
     html, body {
       height: 100%;
@@ -19,62 +20,21 @@
       position: relative;
       z-index: 0;
     }
-
-    #bg-video {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: -1;
-      pointer-events: none;
-    }
-
-    .typing-header {
-      text-align: center;
-      margin-top: 20px;
-    }
-
-    svg {
-      width: 90%;
-      height: 60px;
-    }
-
+    #bg-video { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; pointer-events: none; }
+    .typing-header { text-align: center; margin-top: 20px; }
+    svg { width: 90%; height: 60px; }
     svg text {
-      fill: none;
-      stroke: white;
-      stroke-width: 1px;
-      font-size: 22px;
-      font-weight: bold;
-      letter-spacing: 2px;
-      stroke-dasharray: 400;
-      stroke-dashoffset: 400;
+      fill: none; stroke: white; stroke-width: 1px; font-size: 22px; font-weight: bold;
+      letter-spacing: 2px; stroke-dasharray: 400; stroke-dashoffset: 400;
       animation: type 5s linear forwards infinite alternate;
     }
-
-    @keyframes type {
-      to {stroke-dashoffset: 0;}
-    }
-
-    .audio-controls {
-      text-align: center;
-      margin: 10px 0;
-    }
-
+    @keyframes type { to {stroke-dashoffset: 0;} }
+    .audio-controls { text-align: center; margin: 10px 0; }
     .audio-controls button {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 24px;
-      margin: 10px;
-      cursor: pointer;
-      transition: transform 0.2s;
+      background: none; border: none; color: white; font-size: 24px;
+      margin: 10px; cursor: pointer; transition: transform 0.2s;
     }
-
-    .audio-controls button:hover {
-      transform: scale(1.2);
-    }
-
+    .audio-controls button:hover { transform: scale(1.2); }
     .rainbow-wave {
       height: 40px;
       background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
@@ -82,12 +42,10 @@
       mask-image: url('https://upload.wikimedia.org/wikipedia/commons/f/fd/Sine_wave_animated.gif');
       mask-size: cover;
     }
-
     @keyframes wave {
       0% { background-position: 0% 50%; }
       100% { background-position: 100% 50%; }
     }
-
     .container {
       min-height: 100vh;
       display: flex;
@@ -96,7 +54,6 @@
       justify-content: flex-start;
       padding: 20px;
     }
-
     .box {
       background: rgba(0, 0, 0, 0.6);
       padding: 20px;
@@ -107,20 +64,17 @@
       margin: 20px auto;
       text-align: center;
     }
-
     .input-container {
       display: flex;
       margin-top: 10px;
       gap: 10px;
     }
-
     .input-container input {
       flex: 1;
       padding: 10px;
       border-radius: 8px;
       border: none;
     }
-
     .input-container button {
       padding: 10px;
       background: #ff0057;
@@ -130,7 +84,6 @@
       font-weight: bold;
       cursor: pointer;
     }
-
     .join-buttons {
       display: flex;
       gap: 15px;
@@ -138,7 +91,6 @@
       justify-content: center;
       margin-bottom: 20px;
     }
-
     .join-buttons button {
       background: linear-gradient(270deg, red, orange, yellow, green, blue, indigo, violet);
       background-size: 1400% 1400%;
@@ -151,17 +103,12 @@
       cursor: pointer;
       min-width: 150px;
     }
-
     @keyframes rainbow {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
-
-    #pair {
-      margin-top: 15px;
-    }
-
+    #pair { margin-top: 15px; }
     .matrix-box {
       background: rgba(0, 0, 0, 0.6);
       border-radius: 15px;
@@ -173,7 +120,6 @@
       height: 200px;
       overflow-y: auto;
     }
-
     .matrix-title {
       text-align: center;
       font-size: 30px;
@@ -186,13 +132,11 @@
       text-shadow: 0 0 5px #fff;
       margin-bottom: 15px;
     }
-
     @keyframes rainbowText {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
-
     .matrix-line {
       font-size: 16px;
       user-select: none;
@@ -202,7 +146,6 @@
       margin-bottom: 5px;
       white-space: pre;
     }
-
     @media (max-width: 500px) {
       .input-container {flex-direction: column;}
       .input-container input, .input-container button {width: 100%;}
@@ -214,7 +157,6 @@
 <!-- Background Video -->
 <video id="bg-video" autoplay muted loop playsinline>
   <source src="https://files.catbox.moe/g6bwju.mp4" type="video/mp4">
-  Your browser does not support the video tag.
 </video>
 
 <!-- Header Text -->
@@ -245,7 +187,7 @@
   </div>
 
   <div class="join-buttons">
-    <button onclick="window.open('https://chat.whatsapp.com/GThzurSDIgi8LtBtZotWHn')">OUR CHART ROOM</button>
+    <button onclick="window.open('https://chat.whatsapp.com/HcUtcJWefWLLGC0eHPbUzZ')">Join us today</button>
     <button onclick="window.open('https://whatsapp.com/channel/0029VaeRrcnADTOKzivM0S1r')">SUPPORT CHANNEL</button>
     <button onclick="window.open('https://chat.whatsapp.com/HcUtcJWefWLLGC0eHPbUzZ')">SUPPORT GROUP</button>
   </div>
@@ -257,10 +199,10 @@
   </div>
 </div>
 
-<!-- Audio Element -->
+<!-- Audio -->
 <audio id="audio" loop></audio>
 
-<!-- JS Scripts -->
+<!-- JS -->
 <script>
   const audioSources = [
     "https://files.catbox.moe/ofpmo1.mp3",
@@ -269,16 +211,12 @@
     "https://files.catbox.moe/eckl98.mp4",
     "https://files.catbox.moe/6359fd.mp4"
   ];
-
   const audio = document.getElementById("audio");
   const icon = document.getElementById("audioIcon");
-
-  // Pick random audio source on each page load
   const randomAudioSrc = audioSources[Math.floor(Math.random() * audioSources.length)];
   audio.src = randomAudioSrc;
   audio.load();
 
-  // Play audio on first user interaction
   window.addEventListener("DOMContentLoaded", () => {
     const enableAudio = () => {
       audio.play().then(() => {
@@ -289,7 +227,6 @@
     document.addEventListener("click", enableAudio);
   });
 
-  // Pause/resume audio on visibility change
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) {
       audio.pause();
@@ -332,12 +269,27 @@
         const res = await fetch(`/code?number=${cleanNumber}`);
         const data = await res.json();
         const code = data.code || "Service Unavailable";
-        pair.innerHTML = `<font id="copy" onclick="navigator.clipboard.writeText('${code}')" style="color:red;font-weight:bold; cursor:pointer;" size="5">CODE: <span style="color:white;font-weight:bold">${code}</span></font><br><br><br>`;
+        pair.innerHTML = `
+          <font id="copy" onclick="copyCode('${code}')" style="color:red;font-weight:bold; cursor:pointer;" size="5">
+            CODE: <span id="codeText" style="color:white;font-weight:bold">${code}</span>
+          </font><br><br><br>`;
       } catch {
         pair.innerHTML = '<a style="color:red;font-weight:bold">Error fetching code.</a>';
       }
     }
   });
+
+  function copyCode(code) {
+    navigator.clipboard.writeText(code).then(() => {
+      const copyElement = document.getElementById("copy");
+      copyElement.innerHTML = '✅ <span style="color:white;font-weight:bold">Code Copied Successfully</span>';
+      setTimeout(() => {
+        copyElement.innerHTML = `CODE: <span id="codeText" style="color:white;font-weight:bold">${code}</span>`;
+      }, 3000);
+    }).catch(err => {
+      alert("Failed to copy!");
+    });
+  }
 
   const lines = [
     "HELLO THIS IS ALONE MD BEST WHATSAPP BOT",
